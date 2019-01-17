@@ -2,4 +2,5 @@ gui/.stack-work
 gui/.build-trash
 gui/build
 gui/dist
+gui/node_modules
 **.DS_Store**

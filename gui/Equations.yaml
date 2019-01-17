@@ -7,6 +7,16 @@ ghcjs: nix-shell -A shells.ghcjs
 
 html: cp src/index.html build
 
-js: mkdir -p .build-trash && ghcjs -outputdir .build-trash -DGHCJS_BROWSER -o .build-trash/app src/Main.hs && mv .build-trash/app.jsexe/all.js build/app.js
+pre: mkdir -p .build-trash build
 
-build: mkdir -p build && sae html js
+js: ghcjs -outputdir .build-trash -dedupe -DGHCJS_BROWSER -o .build-trash/app src/Main.hs
+
+move: mv .build-trash/app.jsexe/all.js build/app.js
+
+prod: sae pre js minify move
+
+build: sae pre html js move
+
+prod: sae pre html js minify move
+
+minify: cd .build-trash/app.jsexe && ../../node_modules/.bin/ccjs all.js --compilation_level=ADVANCED_OPTIMIZATIONS --jscomp_off=checkVars --externs=all.js.externs > all.min.js && rm all.js && mv all.min.js all.js
