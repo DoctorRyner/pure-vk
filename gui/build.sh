@@ -1,0 +1,2 @@
+npm i
+nix-shell -A shells.ghcjs --run "mkdir -p .build-trash build && cp src/index.html build && ghcjs -outputdir .build-trash -dedupe -DGHCJS_BROWSER -o .build-trash/app src/Main.hs && cd .build-trash/app.jsexe && ../../node_modules/.bin/ccjs all.js --compilation_level=ADVANCED_OPTIMIZATIONS --jscomp_off=checkVars --externs=all.js.externs > all.min.js && rm all.js && mv all.min.js all.js && mv all.js ../../build"
