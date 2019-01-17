@@ -1,0 +1,12 @@
+default: sae build
+
+code: (/Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron .&) && ghcid
+
+ghc: nix-shell -A shells.ghc
+ghcjs: nix-shell -A shells.ghcjs
+
+html: cp src/index.html build
+
+js: mkdir -p .build-trash && ghcjs -outputdir .build-trash -DGHCJS_BROWSER -o .build-trash/app src/Main.hs && mv .build-trash/app.jsexe/all.js build/app.js
+
+build: mkdir -p build && sae html js
