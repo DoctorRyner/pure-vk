@@ -4,7 +4,7 @@ You should have `nix`, `git` and `npm` to be installed, moreover you must use un
 
 First clone repo `git clone --recurse-submodules https://github.com/DoctorRyner/pure-vk.git`<br>then enter it `cd pure-vk/gui`
 
-# If you don't have sae (you probably don't, I use it for building my projects it uses Equations.yaml)
+# If you don't have sae (you probably don't)
 
 Just type
 ```Bash
@@ -13,7 +13,7 @@ chmod +x build.sh && ./build.sh
 
 # If you do
 
-Just type `sae freshBuild`
+Just type `sae freshBuild` (sae uses Equations.yaml)
 
 # Whats next?
 
