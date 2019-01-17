@@ -1,6 +1,8 @@
 # How to build?
 
-You should have `nix` and `npm` to be installed, moreover you must use unix shell
+You should have `nix`, `git` and `npm` to be installed, moreover you must use unix shell.<br>
+
+First clone repo `git clone --recurse-submodules https://github.com/DoctorRyner/pure-vk.git` then enter it `cd pure-vk/gui`
 
 # If you don't have sae (you probably don't)
 
