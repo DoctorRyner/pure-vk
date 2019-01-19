@@ -16,7 +16,7 @@ extra-source-files:  CHANGELOG.md
 
 executable gui
   main-is:             Main.hs
-  other-modules:       Reflex.Extra
+  -- other-modules:       Reflex.Extra
   -- other-extensions:
   build-depends:       base
                      , reflex-dom
@@ -28,6 +28,7 @@ executable gui
 
   ghc-options:      -Wall
   ghc-options:      -Werror
+  ghc-options:      -Wno-missing-home-modules
   ghc-options:      -Wno-simplifiable-class-constraints
 
   if impl(ghcjs)
