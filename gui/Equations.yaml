@@ -1,13 +1,12 @@
 let:
-  - exe: .build-trash/build/x86_64-linux/ghcjs-8.4.0.1/gui-0.1.0.0/x/gui/build/gui/gui.jsexe/
+  - exe: .build-trash/build/x86_64-linux/ghcjs-8.4.0.1/gui-0.1.0.0/x/gui/noopt/build/gui/gui.jsexe/
+  - exeProd: .build-trash/build/x86_64-linux/ghcjs-8.4.0.1/gui-0.1.0.0/x/gui/build/gui/gui.jsexe/
 
-default: sae build
+default: sae webkit
 
 init: npm i && sae pre
 
 freshBuild: sae init prod_
-
-code: (/Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron .&) && ghcid
 
 ghc: nix-shell -A shells.ghc
 ghcjs: nix-shell -A shells.ghcjs
@@ -17,13 +16,30 @@ html: cp src/index.html build
 pre: mkdir -p .build-trash build
 
 move: cp @exe?all.js build/app.js
+moveProd: cp @exeProd?all.js build/app.js
 
-js: cabal --project-file=cabal-ghcjs.project --builddir=.build-trash new-build gui
+js: cabal --project-file=cabal-ghcjs.project --builddir=.build-trash new-build gui --disable-optimization
+jsProd: cabal --project-file=cabal-ghcjs.project --builddir=.build-trash new-build gui
 
-minify: echo 'Optimizing... may take some time' && node_modules/.bin/ccjs @exe?all.js --compilation_level=ADVANCED_OPTIMIZATIONS --jscomp_off=checkVars --externs=@exe?all.js.externs > @exe?all.min.js && rm @exe?all.js && mv @exe?all.min.js @exe?all.js
+webkit: cabal --builddir=.build-trash new-build gui --disable-optimization && sae webkitRun
 
-build: sae pre js html move
+webkitRun: .build-trash/build/x86_64-osx/ghc-8.4.3/gui-0.1.0.0/x/gui/noopt/build/gui/gui
+
+minify: echo 'Optimizing... may take some time' && node_modules/.bin/ccjs @exeProd?all.js --compilation_level=ADVANCED_OPTIMIZATIONS --jscomp_off=checkVars --externs=@exeProd?all.js.externs > @exeProd?all.min.js && rm @exeProd?all.js && mv @exeProd?all.min.js @exeProd?all.js
+
+buildNoOpen: sae pre js html move
+build: sae pre js html move && open http://localhost:8000
 build_: nix-shell -A shells.ghcjs --run "sae build"
 
-prod: sae pre html js minify move
+# webkitBuild: sae pre 
+
+prod: sae pre html jsProd minify moveProd
 prod_: nix-shell -A shells.ghcjs --run "sae prod"m
+
+server: cd build && python3 -m http.server
+ghcid: ghcid
+
+dev: sae --async code ghcid
+code: (/Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron .&)
+
+watch: nix-shell -A shells.ghcjs --run "shopt -s globstar && fswatch src/**/*.hs | (while read; do sae buildNoOpen; done)"

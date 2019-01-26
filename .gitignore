@@ -4,3 +4,4 @@ gui/build
 gui/dist
 gui/node_modules
 **.DS_Store**
+gui/.ghc.environment.x86_64-darwin-8.4.3
